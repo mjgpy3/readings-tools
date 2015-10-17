@@ -34,6 +34,9 @@ getAllArticles Config{..} = simpleHTTP request >>= getResponseBody
 
 main :: IO ()
 main = do
+  args <- getArgs
   config <- populateConfigFromEnv configWiring
   articles <- getAllArticles config
-  putStrLn articles
+  case args of
+    [] -> putStrLn articles
+    [outputPath] -> writeFile outputPath articles
