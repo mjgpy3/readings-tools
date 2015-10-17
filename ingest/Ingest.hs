@@ -26,8 +26,13 @@ populateConfigFromEnv c@Config{..} = do
   r <- getEnv routeEnv
   return $ c { key = k, route = r}
 
+getAllArticles Config{..} = simpleHTTP request >>= getResponseBody
+  where
+  request = setDetails $ getRequest route
+  setDetails r = r { rqHeaders =  mkHeader HdrAuthorization ("Digest " ++ key) : rqHeaders r }
+
 main :: IO ()
 main = do
   config <- populateConfigFromEnv appConfig
-  print config
-  print "It compiles!"
+  articles <- getAllArticles config
+  putStrLn articles
