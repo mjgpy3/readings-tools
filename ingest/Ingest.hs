@@ -27,6 +27,7 @@ populateConfigFromEnv ConfigWiring{..} = do
   r <- getEnv routeEnv
   return $ Config { key = k, route = r}
 
+getAllArticles :: Config -> IO String
 getAllArticles Config{..} = simpleHTTP request >>= getResponseBody
   where
   request = setDetails $ getRequest route
