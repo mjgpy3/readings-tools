@@ -5,26 +5,27 @@ module Main where
 import Network.HTTP
 import System.Environment
 
-appConfig :: Config
-appConfig = Config {
+configWiring :: ConfigWiring
+configWiring = ConfigWiring {
   keyEnv = "API_SECRET_KEY",
-  routeEnv = "API_ROUTE",
-  key = "",
-  route = ""
+  routeEnv = "API_ROUTE"
+}
+
+data ConfigWiring = ConfigWiring {
+  keyEnv :: String,
+  routeEnv :: String
 }
 
 data Config = Config {
-  keyEnv :: String,
-  routeEnv :: String,
   key :: String,
   route :: String
-} deriving Show
+}
 
-populateConfigFromEnv :: Config -> IO Config
-populateConfigFromEnv c@Config{..} = do
+populateConfigFromEnv :: ConfigWiring -> IO Config
+populateConfigFromEnv ConfigWiring{..} = do
   k <- getEnv keyEnv
   r <- getEnv routeEnv
-  return $ c { key = k, route = r}
+  return $ Config { key = k, route = r}
 
 getAllArticles Config{..} = simpleHTTP request >>= getResponseBody
   where
@@ -33,6 +34,6 @@ getAllArticles Config{..} = simpleHTTP request >>= getResponseBody
 
 main :: IO ()
 main = do
-  config <- populateConfigFromEnv appConfig
+  config <- populateConfigFromEnv configWiring
   articles <- getAllArticles config
   putStrLn articles
