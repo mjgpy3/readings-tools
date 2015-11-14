@@ -1,1 +1,12 @@
-# Tools
+# Tools for readings tracker
+
+## Ingest
+Get documents in a JSON format, to STDOUT
+```
+API_SECRET_KEY=<key> API_ROUTE=<route-to-get-readings> ./Ingest
+```
+
+Write document in a JSON format to <file-name>
+```
+API_SECRET_KEY=<key> API_ROUTE=<route-to-get-readings> ./Ingest <file-name>
+```
