@@ -33,7 +33,7 @@ if __name__ == '__main__':
       url = urlparse(article['url'])
       path = output_path + url.hostname.replace('.', '_') + '/'
 
-      if path.startswith('_'):
+      while path.startswith('_'):
           path = path[1:]
 
       mkdir_p(path)
@@ -50,5 +50,5 @@ if __name__ == '__main__':
 
     'urlparse.urlparse("https://www.google.com").hostname'
 
-  with open(output_path + 'errors.json', 'w') as f:
+  with open(output_path + '/errors.json', 'w') as f:
     f.write(json.dumps(errors))
